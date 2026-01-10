@@ -1,0 +1,54 @@
+Docker - pozwala tworzyc wiele aplikacji na jednym serwerze, ktore sa niezalezne, wyilizowane, ktore moga ze soba rozmawiac, ale kazdy jest zamknienty w swojej osobniej prszestrzeni.
+Nie musimy instalować wielu innych aplikacji i bibliotek na jednym komputerze, ponieważ dzięki Dockerowi możemy umieścić je wszystkie w kontenerach.
+Obrazy - sa jak klassy w programmowaniu objektowym, mamy klassy z ktorych mozemy tworzyc instancje(containery). Obrazy sa odpowiedniki tych klass, a Containery sa odpowiedniki tych instancji
+
+-- Architektura Dockera 
+1.Najpierw laczymy sie z naszego Clienta na Docker Host
+2.Docker Deamon laczy sie z Rejestrem
+3.Docker Deamon sprawdza w cache czy jest nasz obraz - warunek true jak jest to wtedy korzysta z tego lokalnego obrazu i na jego podstawie moze sobie utworzyc container
+jak nie to pobiera z rejestru zdalnego bardzo czesto to moze byc DockerHub, ale rowniez i jakis inne zrodlo.Pobieramy obraz i Docker cachue obraz na naszym lokalnym komputerze, a nastepnie na jego podstawie mozemy tworzyc sobie container
+Moze zazadzac naszymi obrazami i containerami z poziomu Cleinta
+Mozna rowniez podpinac pod containery nasze dyski i tam bede odkladane nasze danne
+Najpopuilarniejszy rejestr Dockera - DockerHub, tam jest massa udostopnionych obrazow publicznie i mozemy korzystac za darmo
+Rejestry mozna tworzyc wlasne, ktore beda przychowywac nasze obrazy
+
+-- Roznica miedzy Maszyna Virtualna, a Dockerem
+
+-Maszyna Virtualna
+Na maszynie Virtualnej mamy:
+Hypervisor
+Host OS: Moze to byc nasz komputer lokalny, server
+Infrastrukture
+Opragromowanie
+Systemy operacyjne: Na nich pozniej sa tworzone te aplikacje
+Aplikacje
+
+Minusy Maszyny Virtualnej:
+Zazrzadzanie pamiecia
+Zasoby Hosta, jesli ma kilka takich Maszyn Virtualnych
+
+-Docker
+Docker sa dogaduje sie z naszym systemem operacyjnym i wszystkie aplikacje i biblioteki uruchumaine sa bezposrednio na naszym systemie operacyjnym, na komputerze na jakim jest zainstolowany Docker
+Dzieki czemu uruchamienie aplikacji jest zdecydowanie szybsze, wygodniejsze, zazadzanie containerami
+Na Dockerze mamy: 
+Infrastrukture
+Host OS + Docker
+Opragromowanie
+Aplikacje
+
+Minusy Dockera:
+Nie mozemy zrobic SnapShot kiedy zamykamy container, tracimy co jest w pamieci 
+Po zastopowaniu containera pamiec jest czyszczona, po uruchomieniu go startuje na nowo
+
+-- Konteinery LXC
+LXC - Linux Containers, to metoda wirtualizacji na poziomie systemu operacyjnego sluzaca do uruchomianiu wielu izolowanych systemow Linus na Hoscie
+
+--Podsumowanie 
+
+z Dockera korzystamy poniewaz: 
+Dzieki niemu uzysujemy porzadek
+Mozemy odizolowac aplikacje
+Mozemy odizolowac srodowiska
+W lepszy sposob zazadzac na komputerze, serveze tym co na nim sie znajduje
+Ulatwia caly process wytworzenia opragromowania, bo ulatwiamy kwestie zwiazane z testowaniem, wysylamy wybramy obraz, testery tworza wlasny container, sprawdzaja czy jest dobrze czy zle
+Nie trzeba tworzyc miliona Maszyn Virtualnych
