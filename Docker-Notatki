@@ -52,3 +52,17 @@ Mozemy odizolowac srodowiska
 W lepszy sposob zazadzac na komputerze, serveze tym co na nim sie znajduje
 Ulatwia caly process wytworzenia opragromowania, bo ulatwiamy kwestie zwiazane z testowaniem, wysylamy wybramy obraz, testery tworza wlasny container, sprawdzaja czy jest dobrze czy zle
 Nie trzeba tworzyc miliona Maszyn Virtualnych
+
+
+--Instalacja Dockera i WSL2
+
+--WSL2
+1.Odpalic PowerShell w trybie admin
+2.Wpisac w PowerShell wsl --install
+3.Jesli po restartu komputera sie nie zainstalowal sie Ubuntu, trzeba wpisac wsl.exe --list --online
+4.Wybrac odpowiedni system albo program i wpisac wsl.exe --install "nazwa programmu/systemu"
+
+
+--Docker
+1.Pobrac plik ze strony: https://docs.docker.com/desktop/setup/install/windows-install/
+2.Odpalic plik i zaczekac jak sie rozpakuje plik i zainstaluje sie
