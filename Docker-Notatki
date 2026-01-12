@@ -80,3 +80,50 @@ Nie trzeba tworzyc miliona Maszyn Virtualnych
 
 --Komendy Docker
 docker --version - sprawdzic versje Dockera
+docker iamges - Wyswietlaja sie obrzy jakie sa dostepne 
+dokcer container ls -a - Wyswietlaja sie containery, containery jakie sa dostepne na naszym Dockerze
+docker start "poczatek id container" - Odpalic container, wystarczy napisac poczatek id containera 
+docker pull "nazwa obrazu:versja" - pobrac obraz
+docker stop my-apache-app - wylaczyc container
+docker rm "nazwa obraza" - usunancz container
+docker exec -it "id container" /bin/sh - wejsc do srodka, zeby moc zmieniac container, po wejscu mozna wpisac ls - zobaczyc pliki
+cd "nazwa_katalogu"   - przejść do katalogu
+cd .. - przejść do katalogu nadrzędnego (wyjść o poziom wyżej)
+vi index.html - otworzyć / edytować plik index.html
+Ctrl + C :wq - wyjsc z edycji pliku
+exit - wyjsc do pozioma Ubuntu
+docker commit "nazwa containera "nazwa uzytkownika"/app:version_1 - zrobic commit
+docker history "nazwa uzytkownika"/app:version_1 - zobaczyc historie zmian
+
+
+---Obrazy i Containery
+--Warswy obrazow
+Kernel - jest to jadro Linuxa, z ktorego korzysta Docker. Dlatego bylo istotne zainstalowa WSL2, zeby docker mog korzystac tego jadra
+Alpine Linux - to jest wersja Linuxa bardzo uboga, okrajona do niezbendych rzeczy. Na nej mozemy sobie instalowac opragromowanie, biblioteki. Jest tez nazywany jako Base Image 
+ADD glibc - jest to biblioteka
+ADD apache - jest to jako webserver, srodowisko uruchominiowe
+Kazda z Warstw ma swoje id, zeby moc w jakis sposob do nich sie odnosic, moc ich indefikowac, jest informacja co jest Parentem(Rodzicem tej warstwy). 
+
+
+--Wartswa Containera
+Wszystko bazuje na Ubuntu
+Kazda warstwa ma swoje rozmiary, czyli np. 1 warstwa 0B, 2 wartstwa 1.895KB, 3 warstwa 194.5MB
+
+
+--Pobranie Obrazu z DockerHub
+httpd - Apache
+docker pull httpd:2.4.66-alpine
+
+
+--Uruchomenie containera
+Apache chodzi na 80 porcie, tak jest domyslnie skonfigurowany, mozna rownie skonfigurowac na dowoln inny port
+docker run -d --name my-apache-app -p 8080:80 httpd:2.4.66-alpine - uruchomi nasz obraz
+
+
+--Edycja pliku
+vi index.html 
+Insert - Trzeba nacisnanc na klawiaturze zeby pisac
+Delete - Trzeba nacisnancz na klawiaturze zeby usuwac
+Ctrl + C :wq - wyjsc z edycji pliku
+exit
+docker commit my-apache-app ypayel/app:version_1 
