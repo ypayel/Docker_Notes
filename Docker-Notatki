@@ -127,3 +127,69 @@ Delete - Trzeba nacisnancz na klawiaturze zeby usuwac
 Ctrl + C :wq - wyjsc z edycji pliku
 exit
 docker commit my-apache-app ypayel/app:version_1 
+
+
+---Tworzenie obrazu
+
+1.Otworzyc Edytor Kodu
+2.Utworzyc folder
+
+
+3.Utworzyc plik naprzyklad index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker obraz</title>
+</head>
+<body>
+    <h1>Docker cwicenia</h1>
+</body>
+</html>
+
+
+4.Utworzyc DockerFile
+# tworzymy nowy etap na podstawie obrazu bazowego
+FROM httpd:2.4.66-alpine 
+
+
+LABEL maintener="Zrob wlasny obraz"
+
+# dodajemy plik lokalnie, dodajemy w tym przypadku tylko index.html
+# ADD /usr/local/apache2/htdocs - w taki sposob dodaje sie caly DockerFile
+ADD ./index.html /usr/local/apache2/htdocs
+
+# EXPOSE nie nadaje portu, a tylko zwraca informacje ze powinien byc na porcie 80 w naszym przypadku
+EXPOSE 80
+
+
+5.Odpalic PowerShell
+6.Wejsc do naszego folder naprzklad: cd C:\Users\User\Documents\GitHub\Docker_Cwicenia
+7.Wpisujemy w terminalu: docker build -t "nazwa obrazu, bez tych nawiasow" "podajemy gdzie jest katolg w moim przypadku to bedzie tak: ./"
+8.Wejsc do terminala Ubuntu, ale to rowniez mozna zrobic PowerShella oraz z aplikacji Docker Desktop
+9.Wpisujemy takie polecenie w Ubuntu: docker run -d --name "wymyslic nazwe dla ubuntu" -p 80:80 "podajemy nazwe naszego obrazu, w moim przypadku to: cwiceniadocker:v1"
+
+--Polecenia do edycji pliku 
+ADD           – dodaje lokalne lub zdalne pliki i katalogi
+ARG           – używa zmiennych na etapie budowania obrazu
+CMD           – określa domyślne polecenie uruchamiane w kontenerze
+COPY          – kopiuje pliki i katalogi
+ENTRYPOINT    – określa główne polecenie (program) kontenera
+ENV           – ustawia zmienne środowiskowe
+EXPOSE        – opisuje, na jakich portach nasłuchuje aplikacja
+FROM          – tworzy nowy etap budowy na podstawie obrazu bazowego
+HEALTHCHECK   – sprawdza stan zdrowia kontenera po uruchomieniu
+LABEL         – dodaje metadane do obrazu
+MAINTAINER    – określa autora obrazu
+ONBUILD       – definiuje instrukcje wykonywane, gdy obraz jest używany w innym buildzie
+RUN           – wykonuje polecenia podczas budowania obrazu
+SHELL         – ustawia domyślną powłokę (shell) obrazu
+STOPSIGNAL    – określa sygnał systemowy do zatrzymania kontenera
+USER          – ustawia użytkownika i grupę
+VOLUME        – tworzy punkt montowania wolumenu
+WORKDIR       – zmienia katalog roboczy
+
+---Podsumowanie
+Jesli chemy budoawc obrazy nie modyfikujac conteinery renczne mozemy to robic za pomoca Dokcerfile
+
