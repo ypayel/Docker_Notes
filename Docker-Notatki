@@ -2,7 +2,7 @@ Docker - pozwala tworzyc wiele aplikacji na jednym serwerze, ktore sa niezalezne
 Nie musimy instalować wielu innych aplikacji i bibliotek na jednym komputerze, ponieważ dzięki Dockerowi możemy umieścić je wszystkie w kontenerach.
 Obrazy - sa jak klassy w programmowaniu objektowym, mamy klassy z ktorych mozemy tworzyc instancje(containery). Obrazy sa odpowiedniki tych klass, a Containery sa odpowiedniki tych instancji
 
----Architektura Dockera 
+##Architektura Dockera 
 1.Najpierw laczymy sie z naszego Clienta na Docker Host
 2.Docker Deamon laczy sie z Rejestrem
 3.Docker Deamon sprawdza w cache czy jest nasz obraz - warunek true jak jest to wtedy korzysta z tego lokalnego obrazu i na jego podstawie moze sobie utworzyc container
@@ -12,9 +12,11 @@ Mozna rowniez podpinac pod containery nasze dyski i tam bede odkladane nasze dan
 Najpopuilarniejszy rejestr Dockera - DockerHub, tam jest massa udostopnionych obrazow publicznie i mozemy korzystac za darmo
 Rejestry mozna tworzyc wlasne, ktore beda przychowywac nasze obrazy
 
----Roznica miedzy Maszyna Virtualna, a Dockerem
+---
 
---Maszyna Virtualna
+##Roznica miedzy Maszyna Virtualna, a Dockerem
+
+##Maszyna Virtualna
 Na maszynie Virtualnej mamy:
 Hypervisor
 Host OS: Moze to byc nasz komputer lokalny, server
@@ -23,11 +25,11 @@ Opragromowanie
 Systemy operacyjne: Na nich pozniej sa tworzone te aplikacje
 Aplikacje
 
---Minusy Maszyny Virtualnej:
+##Minusy Maszyny Virtualnej:
 Zazrzadzanie pamiecia
 Zasoby Hosta, jesli ma kilka takich Maszyn Virtualnych
 
---Docker
+##Docker
 Docker sa dogaduje sie z naszym systemem operacyjnym i wszystkie aplikacje i biblioteki uruchumaine sa bezposrednio na naszym systemie operacyjnym, na komputerze na jakim jest zainstolowany Docker
 Dzieki czemu uruchamienie aplikacji jest zdecydowanie szybsze, wygodniejsze, zazadzanie containerami
 Na Dockerze mamy: 
@@ -36,15 +38,16 @@ Host OS + Docker
 Opragromowanie
 Aplikacje
 
---Minusy Dockera:
+##Minusy Dockera:
 Nie mozemy zrobic SnapShot kiedy zamykamy container, tracimy co jest w pamieci 
 Po zastopowaniu containera pamiec jest czyszczona, po uruchomieniu go startuje na nowo
 
---Konteinery LXC
+##Konteinery LXC
 LXC - Linux Containers, to metoda wirtualizacji na poziomie systemu operacyjnego sluzaca do uruchomianiu wielu izolowanych systemow Linus na Hoscie
 
+---
 
----Podsumowanie 
+###Podsumowanie 
 
 z Dockera korzystamy poniewaz: 
 Dzieki niemu uzysujemy porzadek
@@ -55,21 +58,21 @@ Ulatwia caly process wytworzenia opragromowania, bo ulatwiamy kwestie zwiazane z
 Nie trzeba tworzyc miliona Maszyn Virtualnych
 
 
---Instalacja Dockera i WSL2
+##Instalacja Dockera i WSL2
 
---WSL2
+##WSL2
 1.Odpalic PowerShell w trybie admin
 2.Wpisac w PowerShell wsl --install
 3.Jesli po restartu komputera sie nie zainstalowal sie Ubuntu, trzeba wpisac wsl.exe --list --online
 4.Wybrac odpowiedni system albo program i wpisac wsl.exe --install "nazwa programmu/systemu"
 
 
---Docker
+##Docker
 1.Pobrac plik ze strony: https://docs.docker.com/desktop/setup/install/windows-install/
 2.Odpalic plik i zaczekac jak sie rozpakuje plik i zainstaluje sie
 3.Przejsc kroki w instalatorze Dockera
 
---Jak odpalic pierwszy container
+##Jak odpalic pierwszy container
 1.Zrobic git clone przez PowerShell, przyklad: git clone https://github.com/docker/welcome-to-docker
 2.Robimy obraz - docker build -t welcome-to-docker .
 3.Wejsc w zakladki images, klikamy na nazwe obraza, po prawej stronie u gory bedzie przcisk Run
@@ -78,7 +81,7 @@ Nie trzeba tworzyc miliona Maszyn Virtualnych
 6.Wpisujemy localhost:"port" !!Wazne wejsc na port jaki wpisalismy wczesniej!!
 
 
---Komendy Docker
+##Komendy Docker
 docker --version - sprawdzic versje Dockera
 docker iamges - Wyswietlaja sie obrzy jakie sa dostepne 
 dokcer container ls -a - Wyswietlaja sie containery, containery jakie sa dostepne na naszym Dockerze
@@ -95,9 +98,10 @@ exit - wyjsc do pozioma Ubuntu
 docker commit "nazwa containera "nazwa uzytkownika"/app:version_1 - zrobic commit
 docker history "nazwa uzytkownika"/app:version_1 - zobaczyc historie zmian
 
+---
 
----Obrazy i Containery
---Warswy obrazow
+###Obrazy i Containery
+##Warswy obrazow
 Kernel - jest to jadro Linuxa, z ktorego korzysta Docker. Dlatego bylo istotne zainstalowa WSL2, zeby docker mog korzystac tego jadra
 Alpine Linux - to jest wersja Linuxa bardzo uboga, okrajona do niezbendych rzeczy. Na nej mozemy sobie instalowac opragromowanie, biblioteki. Jest tez nazywany jako Base Image 
 ADD glibc - jest to biblioteka
@@ -105,22 +109,22 @@ ADD apache - jest to jako webserver, srodowisko uruchominiowe
 Kazda z Warstw ma swoje id, zeby moc w jakis sposob do nich sie odnosic, moc ich indefikowac, jest informacja co jest Parentem(Rodzicem tej warstwy). 
 
 
---Wartswa Containera
+##Wartswa Containera
 Wszystko bazuje na Ubuntu
 Kazda warstwa ma swoje rozmiary, czyli np. 1 warstwa 0B, 2 wartstwa 1.895KB, 3 warstwa 194.5MB
 
 
---Pobranie Obrazu z DockerHub
+##Pobranie Obrazu z DockerHub
 httpd - Apache
 docker pull httpd:2.4.66-alpine
 
 
---Uruchomenie containera
+##Uruchomenie containera
 Apache chodzi na 80 porcie, tak jest domyslnie skonfigurowany, mozna rownie skonfigurowac na dowoln inny port
 docker run -d --name my-apache-app -p 8080:80 httpd:2.4.66-alpine - uruchomi nasz obraz
 
 
---Edycja pliku
+##Edycja pliku
 vi index.html 
 Insert - Trzeba nacisnanc na klawiaturze zeby pisac
 Delete - Trzeba nacisnancz na klawiaturze zeby usuwac
@@ -128,8 +132,9 @@ Ctrl + C :wq - wyjsc z edycji pliku
 exit
 docker commit my-apache-app ypayel/app:version_1 
 
+---
 
----Tworzenie obrazu
+###Tworzenie obrazu
 
 1.Otworzyc Edytor Kodu
 2.Utworzyc folder
@@ -170,7 +175,7 @@ EXPOSE 80
 8.Wejsc do terminala Ubuntu, ale to rowniez mozna zrobic PowerShella oraz z aplikacji Docker Desktop
 9.Wpisujemy takie polecenie w Ubuntu: docker run -d --name "wymyslic nazwe dla ubuntu" -p 80:80 "podajemy nazwe naszego obrazu, w moim przypadku to: cwiceniadocker:v1"
 
---Polecenia do edycji pliku 
+##Polecenia do edycji pliku 
 ADD           – dodaje lokalne lub zdalne pliki i katalogi
 ARG           – używa zmiennych na etapie budowania obrazu
 CMD           – określa domyślne polecenie uruchamiane w kontenerze
@@ -190,6 +195,37 @@ USER          – ustawia użytkownika i grupę
 VOLUME        – tworzy punkt montowania wolumenu
 WORKDIR       – zmienia katalog roboczy
 
----Podsumowanie
+##Podsumowanie
 Jesli chemy budoawc obrazy nie modyfikujac conteinery renczne mozemy to robic za pomoca Dokcerfile
+
+---
+
+###Jak dziala dockerignore
+Dockerignor pozwala ignorowac pliki, foldery, katalogi ktore nie powiiny znalesc sie w budydowanych obrazach
+
+w  .dockerignore jesli chcemy z igronorowac jakis plik wpisujemu go nazwe w srodku plika
+np: Dockerfile
+i po kazdej zmianie trzeba utworyc nowa werjse
+
+.* - jesli chcemy zeby wszystkie nazwy rozpaczajace z kropki byly ignorowane
+
+##Dla czego warto korzystac z .dockerignore
+Pomaga w dyzuch projektach ignorowac rozne biblioteki ktore nie sa potrzebne w dalszym korzystaniu np: node_mudeles, vendor.
+Nie musimy ich wysylac do obrazu
+
+##
+RUN npn install - jak chcemy zeby na nowym obrazie juz byl zainstolowany npm
+Plusy:
+1.Nie musimy wysylac tych katalogow oraz wysylanie tych katalogow pod cza budownia, moze zajmowac duzo wiecej czasu
+2.Wydajnosc
+3.Mozemy wtedy uniknanc nie spojnosci dannych, nie spojnosci wersji
+4.Dbamy o stabilnosc aplikacji i jakosc, amiejszamy ryzyko pojawiania sie bledow
+
+
+FROM httpd:2.4.66-alpine 
+LABEL maintener="Zrob wlasny obraz"
+ADD . /usr/local/apache2/htdocs
+
+RUN npm install
+EXPOSE 80
 
