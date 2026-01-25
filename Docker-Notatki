@@ -229,3 +229,20 @@ ADD . /usr/local/apache2/htdocs
 RUN npm install
 EXPOSE 80
 
+
+###TAGI
+
+Tagi sa potrzebne dla tego zeby - jak rozwia sie nasza aplikacja i jest duzo roznych versji albo obrazow moc ich rozronic i wedziec kiedy byly zrobione ostatnie zmiany
+
+docker tag "id naszego obrazu" "nazwa naszego tagu" - mozemy nadawac po ID obrazu
+docker tag "nazwa obrazu" "nowa nazwa obrazu" - mozemy nadawac po imieniu obrazu 
+
+
+versja - 7.80.0
+Pierwsza liczba: 7 - zmiany kluczowe
+Druga liczba: 80 - zmiany mniejsze. mniej wazne, ktore nie wplywaja na dzialanie calej aplikacji 
+Trzecia liczba: 0 - bag fiksy
+
+docker build -t cwiceniadocker/praktyki:1.0.0-beta .
+docker rmi "pelna nazwa obrazu" - usuwa obrazy
+
