@@ -246,3 +246,32 @@ Trzecia liczba: 0 - bag fiksy
 docker build -t cwiceniadocker/praktyki:1.0.0-beta .
 docker rmi "pelna nazwa obrazu" - usuwa obrazy
 
+
+###Połączenie z dyskiem lokalnym i tworzenie Volume
+Volume - służy do przechowywania danych w dłuższej perspektywie, niezależnie od cyklu życia kontenera.
+Rowniez mozemy twrozyc Volumeny pod czas konfigurowania Conteinera
+
+docker volume create test-volume - tworzymy volume
+
+docker volume ls - mozemy sprawdzic wszytskie volume ktore istieja
+
+docker volume rm "nazwa volume" - usuwa volume 
+
+docker run -d --name test-cwicenia-2.0.0-beta_2 -p 82:80 -v app_volume:/app  cwiceniadocker/praktyki:2.0.0-beta - uruchumiamy nasz Container z przedziolonym Volume
+
+mkdir logs - za pomoca mkdir mozemy tworzyc pliki w terminalu Containera
+
+vi text.txt - otwiera plik text.txt w edytorze tekstowym vi.
+
+cp text.txt ./logs/ - kopujemy text.txt w logs
+
+WORKDIR /app - ustawiamy katalog roboczy w conteinerze, wszystkie polecenia beda wykonywane w obszarze tego katalogu
+ADD index.html . - oznacza to ze plik index.html zostanie przezucony w plik w ktorym sie znajdujemy. W tym przypadku bedzie on w /app
+
+##Volumeny nazwane i ananimowe 
+Docker zazadza tymi Volumenami
+docker run -d --name test-cwicenia-2.0.0-beta_2 -p 82:80 -v app_volume:/app  cwiceniadocker/praktyki:2.0.0-beta - wprzypadku tego Volumena jest on nazwany 
+docker run -d --name test-cwicenia-2.0.0-beta_2 -p 82:80 -v /app  cwiceniadocker/praktyki:2.0.0-beta - wprzypadku tego Volumena jest on ananiomy
+
+##Volumeny tworzone lokalnie na dysky
+docker run -d --name test-cwicenia-2.0.0-beta_4 -p 85:80 -v D:/app:/app  cwiceniadocker/praktyki:2.0.0-beta - utworzenie volumena lokalnie na naszym komputerze
