@@ -275,3 +275,32 @@ docker run -d --name test-cwicenia-2.0.0-beta_2 -p 82:80 -v /app  cwiceniadocker
 
 ##Volumeny tworzone lokalnie na dysky
 docker run -d --name test-cwicenia-2.0.0-beta_4 -p 85:80 -v D:/app:/app  cwiceniadocker/praktyki:2.0.0-beta - utworzenie volumena lokalnie na naszym komputerze
+
+
+###Bazy dannych w Docker
+Wersja Bazy powinna byc zblizona na Dockerze do ktorej mamy na serverze
+---env "nazwa zmiennej srodowiskowej" - w ten sposob mozemy przekazywac konfiguracje, wartosci, 
+
+Jak pobrac obraz mariadb:
+$ docker run --detach --name some-mariadb --env MARIADB_USER="wasza nazwa uzytkownika" --env MARIADB_PASSWORD="wasze haslo" --env MARIADB_DATABASE="wasza baza --env MARIADB_ROOT_PASSWORD="wasze haslo do root" -p 3307:3306 mariadb:latest
+
+
+###Sieci w Docker 
+Network Drivers - w Dockerze to mechanizmy, ktore okreslaja, jak kontenery komunikuja sie ze soba i ze swiatem zewnetznym
+bridge - Tworzy wirtualna prywatna siec na hoscie.Kontenery w tej sieci widza sie po nazwach. Kontenery maja wewnetrzne IP, Dostęp z zewnątrz tylko przez mapowanie portów
+host - Kontener nie ma wlasniej sieci, uzywa dokladnie tej samej co system operacyjny. Brak mapowania portów, localhost kontenera = localhost hosta
+none - Kontener nie ma zadnego interfejsu sieciowego. Brak internetu, brak komunikacji
+overlay - Pozwala konteinerom na roznych maszynach dzialac jak w jednej sieci. Kontenery widza sie po nazwach, dziala ponad fizyczna siecia, wymaga Docker Swarm
+macvlan - Kontener jak osobne urzadzenie w LAN. IP z DHCP lub statyczne, kontener widoczny w LAN, host i kontener domyslnie sie nie widza
+ipvlan - Podobny do macvlan ale: mniej overheadu, lepsza wydajnosc, lepsza kontrola routingu. Duze srodowiska, cloud/data center, produkcja
+ipvlan vs macvlan:
+macvlan -> symuluje karte sieciowa
+ipvlan -> uzywa IP, nie MAC
+
+docker network create - -driver ipvlan test-ip - Utworzyc siec
+docker network rm test-ip - Usunancz siec
+docker inspect bridge - Mozemy sprawdzic informacje o sieci 
+docker network disconnect "nazwa sieci" "nazwa kontenera" - usunacz z sieci kontener
+docker network connect "nazwa sieci" "nazwa kontenera" - polaczyc kontener z siecia
+##Wazne w komunikacji pomiedzy serverami nie mozna z pingowac po nazwie konteinera, ale jezeli siec jest utworzona przez nas uzytkownika pingowanie po nazwach kontenera jest mozliwe
+Czyli jesli mamy podpiente kontenery do wlasnej sieci, ktora utworzyzylismy jest mozliwe pingowanie, jest pewnego rodzaju mapowaine nazw na te adressy IP
