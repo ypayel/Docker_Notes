@@ -304,3 +304,174 @@ docker network disconnect "nazwa sieci" "nazwa kontenera" - usunacz z sieci kont
 docker network connect "nazwa sieci" "nazwa kontenera" - polaczyc kontener z siecia
 ##Wazne w komunikacji pomiedzy serverami nie mozna z pingowac po nazwie konteinera, ale jezeli siec jest utworzona przez nas uzytkownika pingowanie po nazwach kontenera jest mozliwe
 Czyli jesli mamy podpiente kontenery do wlasnej sieci, ktora utworzyzylismy jest mozliwe pingowanie, jest pewnego rodzaju mapowaine nazw na te adressy IP
+
+
+###Docker compose
+Docker compose do czego sluzy - jest przepisem jak zbudowac sobie srodowisko zlozone z kilku kontenerow.
+Przyklad docker compose jest takim pzrepisem jak ugotowac ziemniaki, schabowy i mizeria.
+W przsypadku - z ziemniakami to bedzie baza dannych
+Kotletem schabowym - bedzie PHP i Laravel aplikacja
+Mizeria - web server
+
+##Jak utworzyc plik Docker compose
+docker-compose.yml
+version: "3,9"
+
+services:
+    database:
+        container-name: shop-yt-db
+        image: mariadb:latest
+        ports: 
+            -3307:3306
+        environment:
+           - MYSQL_DATABASE="nazwa bazy ablo mozna ${DB_DATABASE}"
+           - MYSQL_USER="nazwa uzytkownika ablo mozna ${DB_USERNAME}"
+           - MYSQL_PASSWORD="haslo ablo mozna ${DB_PASSWORD}"
+           - MYSQL_ROOT_PASSWORD="haslo ablo mozna ${DB_PASSWORD}"
+        volumes:
+            - shop-yt-volume:"sciezka do volumena" /var/lib/mysql
+        networks:
+            - shop-yt-network
+volumes:
+    shop-yt-volume:
+
+networks:
+shop-yt-network
+driver: bridge
+
+##Jak odpalic docker-compose w terminalu
+docker-compose up -d
+
+
+##Aplikacja Laravelowa jak zrobic
+1.Tworzymy Dockerfile
+2.Dodac w Docker compose:
+3.Uzupelnic Dockerfile
+
+Dockerfile
+From php:8.0
+
+RUN apt-get update -y
+RUN docker-php-ext-install pdo pdo_mysql - pobieramy biblioteki ktore nam sie przydadza
+
+WORKDIR /var/www
+COPY ..
+
+COPY --from=composer:"versja ktora mamy" /usr/bin/composer /usr/bin/composer - coposer --version (w taki sposob mozna sprawdzic wersje)
+
+
+ENV PORT=8000 - utwrozymy zmienna 
+ENTRYPOINT ["docker/entrypoint.sh"]
+
+
+
+4.Uzupelniamy plik entrypoint.sh
+#!/bin/bash
+
+composer install --no-interaction --no-progress
+
+php artisan migrate:fresh --seed - zasilenie bazy dannymi testowymi 
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan serve --port=$PORT --host=0.0.0.0 - port taki sam jak zdefiniowalismy w Dockerfile
+
+exec docker-php-entrypoint "$@"
+
+
+5.Uzupelnic docker-compose.yml
+docker-compose.yml
+version: "3,9"
+
+services:
+
+----
+!!!!Krok 2
+    php:
+        container_name: shop-yt
+----
+
+
+----
+!!!!Krok 5
+        build:
+            context: .
+        ports:
+            - 8000:8000
+        volumes:
+            - ./:/var/www
+        network:
+            - shop-ty-network
+----
+
+
+    database:
+        container-name: shop-yt-db - Trzeba wpisac w plik env w nazwe hosta czyli: HB_HOST=shop-yt-db
+        image: mariadb:latest
+        ports: 
+            -3307:3306
+        environment:
+           - MYSQL_DATABASE="nazwa bazy ablo mozna ${DB_DATABASE}"
+           - MYSQL_USER="nazwa uzytkownika ablo mozna ${DB_USERNAME}"
+           - MYSQL_PASSWORD="haslo ablo mozna ${DB_PASSWORD}"
+           - MYSQL_ROOT_PASSWORD="haslo ablo mozna ${DB_PASSWORD}"
+        volumes:
+            - shop-yt-volume:"sciezka do volumena" /var/lib/mysql
+        networks:
+            - shop-yt-network
+volumes:
+    shop-yt-volume:
+
+networks:
+shop-yt-network
+driver: bridge
+
+
+
+6.Odpalic aplikacje
+docker-compose build --no-cache 
+docker-compose up -d
+
+
+7.Krok spawdzic czy dziala aplikacja 
+localhost:8000
+
+
+
+    php:
+        container_name: shop-yt
+
+docker-compose.yml
+version: "3,9"
+
+services:
+
+
+
+    php:
+        container_name: shop-yt
+
+    database:
+        container-name: shop-yt-db - Trzeba wpisac w plik env w nazwe hosta czyli: HB_HOST=shop-yt-db
+        image: mariadb:latest
+        ports: 
+            -3306:3306
+        environment:
+           - MYSQL_DATABASE="nazwa bazy ablo mozna ${DB_DATABASE}"
+           - MYSQL_USER="nazwa uzytkownika ablo mozna ${DB_USERNAME}"
+           - MYSQL_PASSWORD="haslo ablo mozna ${DB_PASSWORD}"
+           - MYSQL_ROOT_PASSWORD="haslo ablo mozna ${DB_PASSWORD}"
+        volumes:
+            - shop-yt-volume:"sciezka do volumena" /var/lib/mysql
+        networks:
+            - shop-yt-network
+volumes:
+    shop-yt-volume:
+
+networks:
+shop-yt-network
+driver: bridge
+
+
+##Uwagi, jak mamy customowy obraz, to musimy najpierw to zbudowac i dopiero pozniej uruchomic
+docker-compose down - usuwa kontenery i siec i utrworzy pozniej na nowo
