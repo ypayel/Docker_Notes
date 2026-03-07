@@ -475,3 +475,83 @@ driver: bridge
 
 ##Uwagi, jak mamy customowy obraz, to musimy najpierw to zbudowac i dopiero pozniej uruchomic
 docker-compose down - usuwa kontenery i siec i utrworzy pozniej na nowo
+
+
+###Docker compose 
+
+.dockerignor - ignorujemy jakis plik, katalog, folder albo biblioteki wszytsko zalezy jakie reguly napiszemy
+Przyklad jak wyglada plik - dockerignor
+
+.idea
+vendor
+node_modules
+storage/app/public - w moim przypadku to sa pliki ktore wgrywa uzytkownik, nie chce tego przezucacz
+
+docker-compose.yml
+version: "3,9"
+
+services:
+    laravel: 
+container_name: shop-yt
+    build:
+context:
+    ports:
+- 80:80
+     volumes:
+        - shop-yt-volume:/var/www/html/storage
+         networks:
+            - shop-yt-network
+
+    database:
+        container-name: shop-yt-db - Trzeba wpisac w plik env w nazwe hosta czyli: HB_HOST=shop-yt-db
+        image: mariadb:latest
+        ports: 
+            -3306:3306
+        environment:
+           - MYSQL_DATABASE="nazwa bazy ablo mozna ${DB_DATABASE}"
+           - MYSQL_USER="nazwa uzytkownika ablo mozna ${DB_USERNAME}"
+           - MYSQL_PASSWORD="haslo ablo mozna ${DB_PASSWORD}"
+           - MYSQL_ROOT_PASSWORD="haslo ablo mozna ${DB_PASSWORD}"
+       volumes:
+            -shop-yt-db-volume:/var/lib/mysql
+        network: 
+            -shop-yt-network
+
+volumes:
+    shop-yt-volume:
+    driver:local
+shop-yt-db-volume:
+    driver:local
+
+networks:
+shop-yt-network
+driver: bridge
+
+Komenda do dockerfile - kiedy chcemy zeby nasza apliokacja zainstolowala dodatkowe biblioteki
+\ - przejscie do nowej linii
+RUN apt-get update -y && apt-get install -y \
+nodejs \
+npm \
+curl \
+zip \
+unzip \
+&& docker-php-exit-install pdo pdo_mysql
+
+RUN a2enmod rewrite - jest potrzebne dla apachi zeby mog odpowiednio sterowac ruchem, jesli tego nie dodac to jest mozliwy blad 404(page not found)
+
+docker-compose build --no-cache - zbudowac nasze obrazy bez korzystania cache
+docker-compose up - automatycznie tworzy, uruchamia i konfiguruje kontenery, sieci oraz wolumeny dla wielokontenerowych aplikacji
+docker-compose down - zatrzymuje containery i usuwa ich, volumeny networks i obrazy 
+
+
+###DockerHub 
+
+Zeby wgrac projekt, obraz, container do DockerHub
+1.Trzeba najpierw zalogowac z poziomy terminala (WSL2 albo PowerShell)
+docker login
+2.Zrobic docker tag 
+            "nazwa obrazu/conteinera" "nowa nazwa obrazu/conteinera" i na koncu wersje
+docker tag welcome-to-docker:latest ypayel/welcome-to-docker:latest
+3.Zrobic pusha 
+                "nowa nazwa"
+docker push ypayel/welcome-to-docker:latest
