@@ -555,3 +555,5 @@ docker tag welcome-to-docker:latest ypayel/welcome-to-docker:latest
 3.Zrobic pusha 
                 "nowa nazwa"
 docker push ypayel/welcome-to-docker:latest
+
+docker commint "nazwa containera" "nazwa repo z dockerHub" - tworzy nowy obraz na podstawie isniejacego containera
